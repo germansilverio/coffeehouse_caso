@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoffeeHouse — Caso de estudio</title>
+<meta name="description" content="De un comentario al pasar a una app usada en producción: cómo se construyó CoffeeHouse, una bitácora de calibración de café.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EBDC; --card:#FDF8EF; --ink:#3A2A1E; --ink-soft:#8A7360;
+    --line:#E4D4BD; --olive:#6C7A44; --brick:#B4552D; --mostaza:#C08A2D;
+    --dark:#211912; --dark-card:#2C2218; --dark-ink:#F2E7D5;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --display:'Bricolage Grotesque','Arial Black',sans-serif;
+    --sans:'Nunito Sans',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  a{color:var(--brick);text-decoration:none;font-weight:700}
+  a:hover{text-decoration:underline}
+
+  /* hero oscuro, modo barra */
+  .hero{background:var(--dark);color:var(--dark-ink);padding:70px 0 60px;text-align:center}
+  .hero .squiggle{margin:0 auto 22px}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(38px,8vw,64px);line-height:1;letter-spacing:-.02em}
+  .hero h1 .acc{color:var(--brick)}
+  .hero .tag{font-size:clamp(17px,3vw,21px);color:var(--dark-ink);opacity:.82;margin-top:16px;font-weight:600}
+  .hero .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mostaza);margin-bottom:20px}
+  .hero-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .hlink{border:1.5px solid #4A3A29;color:var(--dark-ink);padding:11px 20px;border-radius:999px;font-family:var(--display);font-weight:700;font-size:15px;transition:background .15s}
+  .hlink:hover{background:#392f21;text-decoration:none}
+  .hlink.solid{background:var(--brick);border-color:var(--brick)}
+
+  .meta{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;margin-top:38px;font-size:13.5px}
+  .meta div{text-align:left}
+  .meta .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mostaza);margin-bottom:2px}
+  .meta .v{color:var(--dark-ink);font-weight:600;opacity:.9}
+
+  section{padding:52px 0}
+  section+section{border-top:1px solid var(--line)}
+  h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,4vw,32px);letter-spacing:-.01em;margin-bottom:6px}
+  h2 .num{color:var(--mostaza);font-family:var(--mono);font-size:.6em;font-weight:600;margin-right:12px;vertical-align:middle}
+  h3{font-family:var(--display);font-weight:700;font-size:20px;margin:28px 0 8px}
+  p{margin-bottom:16px}
+  p.lead{font-size:19px;color:var(--ink)}
+  .soft{color:var(--ink-soft)}
+
+  figure{margin:28px 0}
+  figure img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+  figcaption{font-size:13.5px;color:var(--ink-soft);margin-top:10px;text-align:center;font-style:italic}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .duo img{width:100%;border-radius:12px;border:1px solid var(--line);display:block}
+  @media(max-width:560px){.duo{grid-template-columns:1fr}}
+
+  blockquote{border-left:4px solid var(--mostaza);padding:4px 0 4px 20px;margin:22px 0;font-size:18px;color:var(--ink);font-style:italic}
+
+  .pill{display:inline-block;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 13px;font-size:13px;font-weight:700;margin:3px 4px 3px 0}
+  .pill .d{color:var(--mostaza)}
+
+  /* timeline de versiones */
+  .ver{border-left:2px solid var(--line);padding:0 0 4px 22px;margin-left:8px}
+  .vrow{position:relative;padding:14px 0}
+  .vrow::before{content:'';position:absolute;left:-29px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--brick);border:3px solid var(--paper)}
+  .vrow .vt{font-family:var(--mono);font-size:12px;color:var(--mostaza);font-weight:600}
+  .vrow .vh{font-family:var(--display);font-weight:700;font-size:17px;margin:2px 0 3px}
+
+  /* tarjetas de lección */
+  .lessons{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+  @media(max-width:560px){.lessons{grid-template-columns:1fr}}
+  .lesson{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .lesson h4{font-family:var(--display);font-weight:700;font-size:16px;margin-bottom:5px}
+  .lesson p{font-size:14.5px;color:var(--ink-soft);margin:0}
+
+  .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+
+  footer{background:var(--dark);color:var(--dark-ink);text-align:center;padding:44px 22px}
+  footer p{opacity:.7;font-size:14px;margin:0}
+  footer .big{font-family:var(--display);font-weight:800;font-size:22px;opacity:1;margin-bottom:8px}
+  footer a{color:var(--mostaza)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap">
+    <svg class="squiggle" width="130" height="11" viewBox="0 0 130 11" aria-hidden="true"><path d="M2 6 Q13 1,24 6 T46 6 T68 6 T90 6 T112 6 T128 6" stroke="#C08A2D" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    <div class="kicker">Caso de estudio · Producto & ejecución</div>
+    <h1>Coffee<span class="acc">House</span></h1>
+    <p class="tag">De un comentario al pasar a una app usada todos los días en la barra de casa.</p>
+    <div class="hero-links">
+      <a class="hlink solid" href="#historia">Ver el proceso ↓</a>
+      <a class="hlink" href="#" data-app>Abrir la app</a>
+      <a class="hlink" href="#" data-repo>Código</a>
+    </div>
+    <div class="meta">
+      <div><div class="k">Rol</div><div class="v">Diseño, especificación y dirección</div></div>
+      <div><div class="k">Tiempo</div><div class="v">~4 días · sesiones cortas</div></div>
+      <div><div class="k">Stack</div><div class="v">HTML · JS · PWA · localStorage</div></div>
+      <div><div class="k">Estado</div><div class="v">En producción, uso diario</div></div>
+    </div>
+  </div>
+</div>
+
+<section id="historia">
+  <div class="wrap">
+    <h2><span class="num">01</span>El problema</h2>
+    <p class="lead">Tengo una estación de espresso en casa y un molinillo con 30 niveles. Cada café nuevo necesita calibrarse —molienda, dosis, rendimiento, tiempo— y una vez que encontrás el punto, hay que <em>recordarlo</em>. Lo llevaba en la cabeza y en notas sueltas que nunca encontraba.</p>
+    <p>La idea nació de la forma menos épica posible: esperando que se renovara un límite de tokens de Claude, parado frente a la barra, pensé "tengo un celular Android sin usar y un problema que registrar". No arranqué queriendo <em>hacer una app</em>. Arranqué con un problema real y molesto.</p>
+    <figure>
+      <img src="img/barra-antes.jpg" alt="La barra de café antes, sin la app">
+      <figcaption>El punto de partida: la barra, el molinillo de 30 pasos, y ningún registro de nada.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="num">02</span>Cómo trabajé</h2>
+    <p>No escribo código. Todo el proyecto se construyó dirigiendo a una IA: mi trabajo fue <strong>especificar bien, iterar sobre lo que volvía, y decidir qué estaba bien resuelto y qué no</strong>. Es más parecido a hacer de product manager que de programador — y ahí mi ventaja no era técnica sino de dominio: sé de café, así que podía detectar cuándo el contenido estaba mal.</p>
+    <p>Cada sesión empezaba con diez minutos de especificación escrita antes de pedir nada. Ese paso —no el prompt— es donde está el verdadero trabajo. La primera spec ya reveló dos supuestos escondidos:</p>
+    <blockquote>En una iteración se me escapó un "obviamente los gramos" pero no era obvio: ¿los de café molido o los de bebida extraída? Resultó que hacían falta ambos, porque juntos habilitan el cálculo del ratio que necesita un espresso perfecto.</blockquote>
+    <p>El segundo supuesto: la molienda no es un dato por café, es un dato <em>por café y por método</em> —el mismo grano se muele fino para espresso y grueso para prensa. Descubrir eso temprano evitó rehacer la estructura después.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="num">03</span>Cómo evolucionó</h2>
+    <p>Cuatro versiones, cada una empujada por feedback de uso real, no por un plan cerrado de entrada.</p>
+    <div class="ver">
+      <div class="vrow"><div class="vt">v1</div><div class="vh">Estructura y persistencia</div><p class="soft" style="margin:0">Tres secciones —registro, estándares, recetas— y datos que sobreviven entre sesiones.</p></div>
+      <div class="vrow"><div class="vt">v2</div><div class="vh">Identidad y contexto de uso</div><p class="soft" style="margin:0">Al definir que viviría en un teléfono apaisado montado en la pared, decisiones "estéticas" se volvieron funcionales: tarjetas deslizables, rueda de molienda que imita el dial físico, paleta que dialoga con la pared verde.</p></div>
+      <div class="vrow"><div class="vt">v3</div><div class="vh">Kiosk real</div><p class="soft" style="margin:0">PWA instalable, funciona sin conexión, timer que sobrevive la suspensión del teléfono, modo oscuro para la noche. Publicada por mí en GitHub Pages.</p></div>
+      <div class="vrow"><div class="vt">v4</div><div class="vh">Ajustes de uso en producción</div><p class="soft" style="margin:0">Layout reorganizado, navegación que se oculta al scrollear, orientación libre para escribir cómodo. Todo detectado usándola de verdad.</p></div>
+    </div>
+    <div class="duo" style="margin-top:28px">
+      <img src="img/pantalla-cafes.jpg" alt="Pantalla de registro de cafés">
+      <img src="img/pantalla-timer.jpg" alt="Pantalla del timer">
+    </div>
+    <figcaption>Registro de calibración por variedad y timer de preparación, en modo barra.</figcaption>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="num">04</span>Decisiones de producto</h2>
+    <p>Construir no fue lo difícil; decidir <em>qué</em> construir y qué dejar afuera, sí. Dos ejemplos:</p>
+    <h3>Distinguir evolución de "scope creep"</h3>
+    <p>La app terminó siendo mucho más que la idea original, pero creció por capas que el uso validaba, nunca por sumarle features sin sentido. Las ideas grandes que aparecían —un modo guiado paso a paso de cada preparación, por ejemplo— se guardaban en un banco de ideas para madurar, en vez de inflar la versión en curso.</p>
+    <h3>El experto de dominio es el control de calidad</h3>
+    <p>En una iteración, la IA describió mal la diferencia entre un americano y un long black. Yo la sabía; la corregí. Cuando dirigís IA para generar contenido especializado, tu criterio no es opcional: es la última línea de defensa contra lo que suena bien pero está mal.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="num">05</span>El resultado</h2>
+    <p class="lead">CoffeeHouse vive hoy en un Moto G100 restaurado, montado en la barra, con su propia cuenta y su identidad visual. La uso todos los días.</p>
+    <figure>
+      <img src="img/pared-cafes.jpg" alt="La app instalada en la barra, mostrando una variedad con su perfil de cata">
+      <figcaption>En producción: variedad nueva con su perfil de cata cargado, lista para calibrar. En modo barra, la pantalla se funde con la pared.</figcaption>
+    </figure>
+    <p>La primera calibración real fue un magic: molienda demasiado fina, apenas 12,7 g extraídos en 25 segundos. Salió desbalanceado —pero quedó <em>registrado</em>, con la nota de qué probar la próxima vez. Ese bucle —hipótesis, prueba, registro, ajuste— es exactamente para lo que existe la app. Funcionó calibrándola mientras calibraba el café.</p>
+    <figure>
+      <img src="img/pared-timer.jpg" alt="El timer de la app, listo en la barra">
+      <figcaption>El timer, a mano durante la extracción. La estación además quedó conectada a asistente de voz y a una rutina de música de barista.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="num">06</span>Qué me llevo</h2>
+    <div class="lessons">
+      <div class="lesson"><h4>El contexto de uso es parte de la spec</h4><p>"Se usa en un teléfono apaisado en la pared" convirtió decisiones de estilo en decisiones funcionales.</p></div>
+      <div class="lesson"><h4>Lo "obvio" esconde supuestos</h4><p>Cada palabra dada por sentada en una especificación es una decisión sin tomar.</p></div>
+      <div class="lesson"><h4>Terminar &gt; ser ambicioso</h4><p>Una app chica usada todos los días enseña más que una grande abandonada.</p></div>
+      <div class="lesson"><h4>Criticar la causa, no el síntoma</h4><p>"Quedó como una tabla apretada" permite arreglar la estructura; "está feo" no.</p></div>
+    </div>
+    <h3 style="margin-top:34px">Stack y técnicas</h3>
+    <div class="stack">
+      <span class="pill"><span class="d">·</span> HTML + JS sin frameworks</span>
+      <span class="pill"><span class="d">·</span> PWA instalable</span>
+      <span class="pill"><span class="d">·</span> localStorage</span>
+      <span class="pill"><span class="d">·</span> Service worker / offline</span>
+      <span class="pill"><span class="d">·</span> Wake Lock API</span>
+      <span class="pill"><span class="d">·</span> Timer por timestamp</span>
+      <span class="pill"><span class="d">·</span> GitHub Pages</span>
+      <span class="pill"><span class="d">·</span> Diseño responsive</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="big">CoffeeHouse</p>
+  <p>Un proyecto de vibecoding — idea, especificación y dirección de <strong>Germán</strong>.</p>
+  <p style="margin-top:10px"><a href="#" data-app>Abrir la app</a> &nbsp;·&nbsp; <a href="#" data-repo>Ver el código</a></p>
+</footer>
+
+<script>
+  // Completá estas dos URLs una sola vez y todos los botones quedan enlazados.
+  const APP_URL  = "https://germansilverio.github.io/coffeehouse";  // ej: https://TU-USUARIO.github.io/coffeehouse/
+  const REPO_URL = "https://germansilverio.github.io/coffeehouse_caso";  // ej: https://github.com/TU-USUARIO/coffeehouse
+  document.querySelectorAll('[data-app]').forEach(a=>{ if(APP_URL) a.href=APP_URL; else a.style.display='none'; });
+  document.querySelectorAll('[data-repo]').forEach(a=>{ if(REPO_URL) a.href=REPO_URL; else a.style.display='none'; });
+</script>
+</body>
+</html>
