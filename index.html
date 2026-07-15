@@ -23,6 +23,11 @@
   a{color:var(--brick);text-decoration:none;font-weight:700}
   a:hover{text-decoration:underline}
 
+  /* toggle de idioma */
+  .langtoggle{position:fixed;top:14px;right:14px;z-index:50;display:flex;gap:2px;background:rgba(253,248,239,.92);border:1px solid var(--line);border-radius:999px;padding:3px;font-family:var(--mono);font-size:12px;font-weight:600;box-shadow:0 2px 10px rgba(33,25,18,.15);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .langtoggle button{border:0;background:transparent;color:var(--ink-soft);padding:5px 12px;border-radius:999px;cursor:pointer;font:inherit;letter-spacing:.06em}
+  .langtoggle button.on{background:var(--brick);color:#fff}
+
   /* hero oscuro, modo barra */
   .hero{background:var(--dark);color:var(--dark-ink);padding:70px 0 60px;text-align:center}
   .hero .squiggle{margin:0 auto 22px}
@@ -85,128 +90,232 @@
 </head>
 <body>
 
+<div class="langtoggle" role="group" aria-label="Idioma / Language">
+  <button id="btn-es" type="button" class="on" onclick="setLang('es')">ES</button>
+  <button id="btn-en" type="button" onclick="setLang('en')">EN</button>
+</div>
+
 <div class="hero">
   <div class="wrap">
     <svg class="squiggle" width="130" height="11" viewBox="0 0 130 11" aria-hidden="true"><path d="M2 6 Q13 1,24 6 T46 6 T68 6 T90 6 T112 6 T128 6" stroke="#C08A2D" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
-    <div class="kicker">Caso de estudio · Producto & ejecución</div>
+    <div class="kicker" data-i18n="kicker">Caso de estudio · Producto & ejecución</div>
     <h1>Coffee<span class="acc">House</span></h1>
-    <p class="tag">De un comentario al pasar a una app usada todos los días en la barra de casa.</p>
+    <p class="tag" data-i18n="tag">De un comentario al pasar a una app usada todos los días en la barra de casa.</p>
     <div class="hero-links">
-      <a class="hlink solid" href="#historia">Ver el proceso ↓</a>
-      <a class="hlink" href="#" data-app>Abrir la app</a>
-      <a class="hlink" href="#" data-repo>Código</a>
+      <a class="hlink solid" href="#historia" data-i18n="link-proc">Ver el proceso ↓</a>
+      <a class="hlink" href="#" data-app data-i18n="link-app">Abrir la app</a>
+      <a class="hlink" href="#" data-repo data-i18n="link-code">Código</a>
     </div>
     <div class="meta">
-      <div><div class="k">Rol</div><div class="v">Diseño, especificación y dirección</div></div>
-      <div><div class="k">Tiempo</div><div class="v">~4 días · sesiones cortas</div></div>
-      <div><div class="k">Stack</div><div class="v">HTML · JS · PWA · localStorage</div></div>
-      <div><div class="k">Estado</div><div class="v">En producción, uso diario</div></div>
+      <div><div class="k" data-i18n="m-role-k">Rol</div><div class="v" data-i18n="m-role-v">Diseño, especificación y dirección</div></div>
+      <div><div class="k" data-i18n="m-time-k">Tiempo</div><div class="v" data-i18n="m-time-v">~4 días · sesiones cortas</div></div>
+      <div><div class="k" data-i18n="m-stack-k">Stack</div><div class="v" data-i18n="m-stack-v">HTML · JS · PWA · localStorage</div></div>
+      <div><div class="k" data-i18n="m-state-k">Estado</div><div class="v" data-i18n="m-state-v">En producción, uso diario</div></div>
     </div>
   </div>
 </div>
 
 <section id="historia">
   <div class="wrap">
-    <h2><span class="num">01</span>El problema</h2>
-    <p class="lead">Tengo una estación de espresso en casa y un molinillo con 30 niveles. Cada café nuevo necesita calibrarse —molienda, dosis, rendimiento, tiempo— y una vez que encontrás el punto, hay que <em>recordarlo</em>. Lo llevaba en la cabeza y en notas sueltas que nunca encontraba.</p>
-    <p>La idea nació de la forma menos épica posible: esperando que se renovara un límite de tokens de Claude, parado frente a la barra, pensé "tengo un celular Android sin usar y un problema que registrar". No arranqué queriendo <em>hacer una app</em>. Arranqué con un problema real y molesto.</p>
+    <h2><span class="num">01</span><span data-i18n="s1-h">El problema</span></h2>
+    <p class="lead" data-i18n="s1-lead">Tengo una estación de espresso en casa y un molinillo con 30 niveles. Cada café nuevo necesita calibrarse —molienda, dosis, rendimiento, tiempo— y una vez que encontrás el punto, hay que <em>recordarlo</em>. Lo llevaba en la cabeza y en notas sueltas que nunca encontraba.</p>
+    <p data-i18n="s1-p">La idea nació de la forma menos épica posible: esperando que se renovara un límite de tokens de Claude, parado frente a la barra, pensé "tengo un celular Android sin usar y un problema que registrar". No arranqué queriendo <em>hacer una app</em>. Arranqué con un problema real y molesto.</p>
     <figure>
       <img src="img/barra-antes.jpg" alt="La barra de café antes, sin la app">
-      <figcaption>El punto de partida: la barra, el molinillo de 30 pasos, y ningún registro de nada.</figcaption>
+      <figcaption data-i18n="s1-cap">El punto de partida: la barra, el molinillo de 30 pasos, y ningún registro de nada.</figcaption>
     </figure>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2><span class="num">02</span>Cómo trabajé</h2>
-    <p>No escribo código. Todo el proyecto se construyó dirigiendo a una IA: mi trabajo fue <strong>especificar bien, iterar sobre lo que volvía, y decidir qué estaba bien resuelto y qué no</strong>. Es más parecido a hacer de product manager que de programador — y ahí mi ventaja no era técnica sino de dominio: sé de café, así que podía detectar cuándo el contenido estaba mal.</p>
-    <p>Cada sesión empezaba con diez minutos de especificación escrita antes de pedir nada. Ese paso —no el prompt— es donde está el verdadero trabajo. La primera spec ya reveló dos supuestos escondidos:</p>
-    <blockquote>En una iteración se me escapó un "obviamente los gramos" pero no era obvio: ¿los de café molido o los de bebida extraída? Resultó que hacían falta ambos, porque juntos habilitan el cálculo del ratio que necesita un espresso perfecto.</blockquote>
-    <p>El segundo supuesto: la molienda no es un dato por café, es un dato <em>por café y por método</em> —el mismo grano se muele fino para espresso y grueso para prensa. Descubrir eso temprano evitó rehacer la estructura después.</p>
+    <h2><span class="num">02</span><span data-i18n="s2-h">Cómo trabajé</span></h2>
+    <p data-i18n="s2-p1">No escribo código. Todo el proyecto se construyó dirigiendo a una IA: mi trabajo fue <strong>especificar bien, iterar sobre lo que volvía, y decidir qué estaba bien resuelto y qué no</strong>. Es más parecido a hacer de product manager que de programador — y ahí mi ventaja no era técnica sino de dominio: sé de café, así que podía detectar cuándo el contenido estaba mal.</p>
+    <p data-i18n="s2-p2">Cada sesión empezaba con diez minutos de especificación escrita antes de pedir nada. Ese paso —no el prompt— es donde está el verdadero trabajo. La primera spec ya reveló dos supuestos escondidos:</p>
+    <blockquote data-i18n="s2-quote">En una iteración se me escapó un "obviamente los gramos" pero no era obvio: ¿los de café molido o los de bebida extraída? Resultó que hacían falta ambos, porque juntos habilitan el cálculo del ratio que necesita un espresso perfecto.</blockquote>
+    <p data-i18n="s2-p3">El segundo supuesto: la molienda no es un dato por café, es un dato <em>por café y por método</em> —el mismo grano se muele fino para espresso y grueso para prensa. Descubrir eso temprano evitó rehacer la estructura después.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2><span class="num">03</span>Cómo evolucionó</h2>
-    <p>Cuatro versiones, cada una empujada por feedback de uso real, no por un plan cerrado de entrada.</p>
+    <h2><span class="num">03</span><span data-i18n="s3-h">Cómo evolucionó</span></h2>
+    <p data-i18n="s3-p">Cuatro versiones, cada una empujada por feedback de uso real, no por un plan cerrado de entrada.</p>
     <div class="ver">
-      <div class="vrow"><div class="vt">v1</div><div class="vh">Estructura y persistencia</div><p class="soft" style="margin:0">Tres secciones —registro, estándares, recetas— y datos que sobreviven entre sesiones.</p></div>
-      <div class="vrow"><div class="vt">v2</div><div class="vh">Identidad y contexto de uso</div><p class="soft" style="margin:0">Al definir que viviría en un teléfono apaisado montado en la pared, decisiones "estéticas" se volvieron funcionales: tarjetas deslizables, rueda de molienda que imita el dial físico, paleta que dialoga con la pared verde.</p></div>
-      <div class="vrow"><div class="vt">v3</div><div class="vh">Kiosk real</div><p class="soft" style="margin:0">PWA instalable, funciona sin conexión, timer que sobrevive la suspensión del teléfono, modo oscuro para la noche. Publicada por mí en GitHub Pages.</p></div>
-      <div class="vrow"><div class="vt">v4</div><div class="vh">Ajustes de uso en producción</div><p class="soft" style="margin:0">Layout reorganizado, navegación que se oculta al scrollear, orientación libre para escribir cómodo. Todo detectado usándola de verdad.</p></div>
+      <div class="vrow"><div class="vt">v1</div><div class="vh" data-i18n="v1-h">Estructura y persistencia</div><p class="soft" style="margin:0" data-i18n="v1-p">Tres secciones —registro, estándares, recetas— y datos que sobreviven entre sesiones.</p></div>
+      <div class="vrow"><div class="vt">v2</div><div class="vh" data-i18n="v2-h">Identidad y contexto de uso</div><p class="soft" style="margin:0" data-i18n="v2-p">Al definir que viviría en un teléfono apaisado montado en la pared, decisiones "estéticas" se volvieron funcionales: tarjetas deslizables, rueda de molienda que imita el dial físico, paleta que dialoga con la pared verde.</p></div>
+      <div class="vrow"><div class="vt">v3</div><div class="vh" data-i18n="v3-h">Kiosk real</div><p class="soft" style="margin:0" data-i18n="v3-p">PWA instalable, funciona sin conexión, timer que sobrevive la suspensión del teléfono, modo oscuro para la noche. Publicada por mí en GitHub Pages.</p></div>
+      <div class="vrow"><div class="vt">v4</div><div class="vh" data-i18n="v4-h">Ajustes de uso en producción</div><p class="soft" style="margin:0" data-i18n="v4-p">Layout reorganizado, navegación que se oculta al scrollear, orientación libre para escribir cómodo. Todo detectado usándola de verdad.</p></div>
     </div>
     <div class="duo" style="margin-top:28px">
       <img src="img/pantalla-cafes.jpg" alt="Pantalla de registro de cafés">
       <img src="img/pantalla-timer.jpg" alt="Pantalla del timer">
     </div>
-    <figcaption>Registro de calibración por variedad y timer de preparación, en modo barra.</figcaption>
+    <figcaption data-i18n="s3-cap">Registro de calibración por variedad y timer de preparación, en modo barra.</figcaption>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2><span class="num">04</span>Decisiones de producto</h2>
-    <p>Construir no fue lo difícil; decidir <em>qué</em> construir y qué dejar afuera, sí. Dos ejemplos:</p>
-    <h3>Distinguir evolución de "scope creep"</h3>
-    <p>La app terminó siendo mucho más que la idea original, pero creció por capas que el uso validaba, nunca por sumarle features sin sentido. Las ideas grandes que aparecían —un modo guiado paso a paso de cada preparación, por ejemplo— se guardaban en un banco de ideas para madurar, en vez de inflar la versión en curso.</p>
-    <h3>El experto de dominio es el control de calidad</h3>
-    <p>En una iteración, la IA describió mal la diferencia entre un americano y un long black. Yo la sabía; la corregí. Cuando dirigís IA para generar contenido especializado, tu criterio no es opcional: es la última línea de defensa contra lo que suena bien pero está mal.</p>
+    <h2><span class="num">04</span><span data-i18n="s4-h">Decisiones de producto</span></h2>
+    <p data-i18n="s4-p">Construir no fue lo difícil; decidir <em>qué</em> construir y qué dejar afuera, sí. Dos ejemplos:</p>
+    <h3 data-i18n="s4-h3a">Distinguir evolución de "scope creep"</h3>
+    <p data-i18n="s4-pa">La app terminó siendo mucho más que la idea original, pero creció por capas que el uso validaba, nunca por sumarle features sin sentido. Las ideas grandes que aparecían —un modo guiado paso a paso de cada preparación, por ejemplo— se guardaban en un banco de ideas para madurar, en vez de inflar la versión en curso.</p>
+    <h3 data-i18n="s4-h3b">El experto de dominio es el control de calidad</h3>
+    <p data-i18n="s4-pb">En una iteración, la IA describió mal la diferencia entre un americano y un long black. Yo la sabía; la corregí. Cuando dirigís IA para generar contenido especializado, tu criterio no es opcional: es la última línea de defensa contra lo que suena bien pero está mal.</p>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2><span class="num">05</span>El resultado</h2>
-    <p class="lead">CoffeeHouse vive hoy en un Moto G100 restaurado, montado en la barra, con su propia cuenta y su identidad visual. La uso todos los días.</p>
+    <h2><span class="num">05</span><span data-i18n="s5-h">El resultado</span></h2>
+    <p class="lead" data-i18n="s5-lead">CoffeeHouse vive hoy en un Moto G100 restaurado, montado en la barra, con su propia cuenta y su identidad visual. La uso todos los días.</p>
     <figure>
       <img src="img/pared-cafes.jpg" alt="La app instalada en la barra, mostrando una variedad con su perfil de cata">
-      <figcaption>En producción: variedad nueva con su perfil de cata cargado, lista para calibrar. En modo barra, la pantalla se funde con la pared.</figcaption>
+      <figcaption data-i18n="s5-cap1">En producción: variedad nueva con su perfil de cata cargado, lista para calibrar. En modo barra, la pantalla se funde con la pared.</figcaption>
     </figure>
-    <p>La primera calibración real fue un magic: molienda demasiado fina, apenas 12,7 g extraídos en 25 segundos. Salió desbalanceado —pero quedó <em>registrado</em>, con la nota de qué probar la próxima vez. Ese bucle —hipótesis, prueba, registro, ajuste— es exactamente para lo que existe la app. Funcionó calibrándola mientras calibraba el café.</p>
+    <p data-i18n="s5-p">La primera calibración real fue un magic: molienda demasiado fina, apenas 12,7 g extraídos en 25 segundos. Salió desbalanceado —pero quedó <em>registrado</em>, con la nota de qué probar la próxima vez. Ese bucle —hipótesis, prueba, registro, ajuste— es exactamente para lo que existe la app. Funcionó calibrándola mientras calibraba el café.</p>
     <figure>
       <img src="img/pared-timer.jpg" alt="El timer de la app, listo en la barra">
-      <figcaption>El timer, a mano durante la extracción. La estación además quedó conectada a asistente de voz y a una rutina de música de barista.</figcaption>
+      <figcaption data-i18n="s5-cap2">El timer, a mano durante la extracción. La estación además quedó conectada a asistente de voz y a una rutina de música de barista.</figcaption>
     </figure>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <h2><span class="num">06</span>Qué me llevo</h2>
+    <h2><span class="num">06</span><span data-i18n="s6-h">Qué me llevo</span></h2>
     <div class="lessons">
-      <div class="lesson"><h4>El contexto de uso es parte de la spec</h4><p>"Se usa en un teléfono apaisado en la pared" convirtió decisiones de estilo en decisiones funcionales.</p></div>
-      <div class="lesson"><h4>Lo "obvio" esconde supuestos</h4><p>Cada palabra dada por sentada en una especificación es una decisión sin tomar.</p></div>
-      <div class="lesson"><h4>Terminar &gt; ser ambicioso</h4><p>Una app chica usada todos los días enseña más que una grande abandonada.</p></div>
-      <div class="lesson"><h4>Criticar la causa, no el síntoma</h4><p>"Quedó como una tabla apretada" permite arreglar la estructura; "está feo" no.</p></div>
+      <div class="lesson"><h4 data-i18n="l1-h">El contexto de uso es parte de la spec</h4><p data-i18n="l1-p">"Se usa en un teléfono apaisado en la pared" convirtió decisiones de estilo en decisiones funcionales.</p></div>
+      <div class="lesson"><h4 data-i18n="l2-h">Lo "obvio" esconde supuestos</h4><p data-i18n="l2-p">Cada palabra dada por sentada en una especificación es una decisión sin tomar.</p></div>
+      <div class="lesson"><h4 data-i18n="l3-h">Terminar &gt; ser ambicioso</h4><p data-i18n="l3-p">Una app chica usada todos los días enseña más que una grande abandonada.</p></div>
+      <div class="lesson"><h4 data-i18n="l4-h">Criticar la causa, no el síntoma</h4><p data-i18n="l4-p">"Quedó como una tabla apretada" permite arreglar la estructura; "está feo" no.</p></div>
     </div>
-    <h3 style="margin-top:34px">Stack y técnicas</h3>
+    <h3 style="margin-top:34px" data-i18n="s6-stack-h">Stack y técnicas</h3>
     <div class="stack">
-      <span class="pill"><span class="d">·</span> HTML + JS sin frameworks</span>
-      <span class="pill"><span class="d">·</span> PWA instalable</span>
-      <span class="pill"><span class="d">·</span> localStorage</span>
-      <span class="pill"><span class="d">·</span> Service worker / offline</span>
-      <span class="pill"><span class="d">·</span> Wake Lock API</span>
-      <span class="pill"><span class="d">·</span> Timer por timestamp</span>
-      <span class="pill"><span class="d">·</span> GitHub Pages</span>
-      <span class="pill"><span class="d">·</span> Diseño responsive</span>
+      <span class="pill" data-i18n="p1"><span class="d">·</span> HTML + JS sin frameworks</span>
+      <span class="pill" data-i18n="p2"><span class="d">·</span> PWA instalable</span>
+      <span class="pill" data-i18n="p3"><span class="d">·</span> localStorage</span>
+      <span class="pill" data-i18n="p4"><span class="d">·</span> Service worker / offline</span>
+      <span class="pill" data-i18n="p5"><span class="d">·</span> Wake Lock API</span>
+      <span class="pill" data-i18n="p6"><span class="d">·</span> Timer por timestamp</span>
+      <span class="pill" data-i18n="p7"><span class="d">·</span> GitHub Pages</span>
+      <span class="pill" data-i18n="p8"><span class="d">·</span> Diseño responsive</span>
     </div>
   </div>
 </section>
 
 <footer>
   <p class="big">CoffeeHouse</p>
-  <p>Un proyecto de vibecoding — idea, especificación y dirección de <strong>Germán</strong>.</p>
-  <p style="margin-top:10px"><a href="#" data-app>Abrir la app</a> &nbsp;·&nbsp; <a href="#" data-repo>Ver el código</a></p>
+  <p data-i18n="f-p">Un proyecto de vibecoding — idea, especificación y dirección de <strong>Germán</strong>.</p>
+  <p style="margin-top:10px"><a href="#" data-app data-i18n="f-app">Abrir la app</a> &nbsp;·&nbsp; <a href="#" data-repo data-i18n="f-code">Ver el código</a></p>
 </footer>
 
 <script>
-  // Completá estas dos URLs una sola vez y todos los botones quedan enlazados.
+  // ---- Enlaces de la app / repo ----
   const APP_URL  = "";  // ej: https://TU-USUARIO.github.io/coffeehouse/
   const REPO_URL = "";  // ej: https://github.com/TU-USUARIO/coffeehouse
   document.querySelectorAll('[data-app]').forEach(a=>{ if(APP_URL) a.href=APP_URL; else a.style.display='none'; });
   document.querySelectorAll('[data-repo]').forEach(a=>{ if(REPO_URL) a.href=REPO_URL; else a.style.display='none'; });
+
+  // ---- Diccionario inglés (el español vive en el HTML) ----
+  const EN = {
+    "kicker":"Case study · Product & execution",
+    "tag":"From an offhand comment to an app used every day at my home coffee bar.",
+    "link-proc":"See the process ↓",
+    "link-app":"Open the app",
+    "link-code":"Code",
+    "m-role-k":"Role", "m-role-v":"Design, specification & direction",
+    "m-time-k":"Time", "m-time-v":"~4 days · short sessions",
+    "m-stack-k":"Stack", "m-stack-v":"HTML · JS · PWA · localStorage",
+    "m-state-k":"Status", "m-state-v":"In production, daily use",
+
+    "s1-h":"The problem",
+    "s1-lead":"I have an espresso station at home and a grinder with 30 settings. Every new coffee needs calibrating —grind, dose, yield, time— and once you find the sweet spot, you have to <em>remember</em> it. I kept it in my head and in loose notes I could never find.",
+    "s1-p":"The idea was born in the least epic way possible: waiting for a Claude token limit to reset, standing at the bar, I thought \"I have an unused Android phone and a problem worth tracking.\" I didn't set out to <em>build an app</em>. I started with a real, annoying problem.",
+    "s1-cap":"The starting point: the bar, the 30-step grinder, and no record of anything.",
+
+    "s2-h":"How I worked",
+    "s2-p1":"I don't write code. The whole project was built by directing an AI: my job was to <strong>specify well, iterate on what came back, and decide what was well solved and what wasn't</strong>. It's closer to being a product manager than a programmer — and there my edge wasn't technical but domain-based: I know coffee, so I could spot when the content was wrong.",
+    "s2-p2":"Each session started with ten minutes of written specification before asking for anything. That step —not the prompt— is where the real work is. The first spec already revealed two hidden assumptions:",
+    "s2-quote":"In one iteration an \"obviously the grams\" slipped in, but it wasn't obvious: the grams of ground coffee or of extracted drink? It turned out both were needed, because together they enable the ratio calculation a perfect espresso requires.",
+    "s2-p3":"The second assumption: grind isn't a per-coffee value, it's a value <em>per coffee and per method</em> —the same bean is ground fine for espresso and coarse for press. Catching that early avoided rebuilding the structure later.",
+
+    "s3-h":"How it evolved",
+    "s3-p":"Four versions, each pushed by real usage feedback, not by a closed plan set out from the start.",
+    "v1-h":"Structure and persistence",
+    "v1-p":"Three sections —log, standards, recipes— and data that survives between sessions.",
+    "v2-h":"Identity and usage context",
+    "v2-p":"Once I decided it would live on a landscape phone mounted on the wall, \"aesthetic\" decisions became functional: swipeable cards, a grind wheel that mimics the physical dial, a palette that dialogues with the green wall.",
+    "v3-h":"A real kiosk",
+    "v3-p":"Installable PWA, works offline, a timer that survives the phone sleeping, dark mode for the night. Published by me on GitHub Pages.",
+    "v4-h":"Production usage tweaks",
+    "v4-p":"Reorganized layout, navigation that hides on scroll, free orientation to write comfortably. All detected by actually using it.",
+    "s3-cap":"Calibration log by variety and preparation timer, in bar mode.",
+
+    "s4-h":"Product decisions",
+    "s4-p":"Building wasn't the hard part; deciding <em>what</em> to build and what to leave out was. Two examples:",
+    "s4-h3a":"Telling evolution apart from scope creep",
+    "s4-pa":"The app ended up being much more than the original idea, but it grew in layers that usage validated, never by piling on pointless features. The big ideas that showed up —a guided step-by-step mode for each preparation, for example— were parked in an idea bank to mature, instead of bloating the version in progress.",
+    "s4-h3b":"The domain expert is quality control",
+    "s4-pb":"In one iteration, the AI mis-described the difference between an americano and a long black. I knew it; I corrected it. When you direct AI to generate specialized content, your judgment isn't optional: it's the last line of defense against what sounds right but is wrong.",
+
+    "s5-h":"The result",
+    "s5-lead":"CoffeeHouse lives today on a restored Moto G100, mounted on the bar, with its own account and visual identity. I use it every day.",
+    "s5-cap1":"In production: a new variety with its tasting profile loaded, ready to calibrate. In bar mode, the screen blends into the wall.",
+    "s5-p":"The first real calibration was a mess: grind too fine, barely 12.7 g extracted in 25 seconds. It came out unbalanced —but it got <em>logged</em>, with a note on what to try next time. That loop —hypothesis, test, log, adjust— is exactly what the app exists for. It worked by calibrating itself while I calibrated the coffee.",
+    "s5-cap2":"The timer, at hand during extraction. The station also ended up connected to a voice assistant and a barista music routine.",
+
+    "s6-h":"What I take away",
+    "l1-h":"Usage context is part of the spec",
+    "l1-p":"\"It's used on a landscape phone on the wall\" turned style decisions into functional ones.",
+    "l2-h":"The \"obvious\" hides assumptions",
+    "l2-p":"Every word taken for granted in a spec is a decision left unmade.",
+    "l3-h":"Finishing &gt; being ambitious",
+    "l3-p":"A small app used every day teaches more than a big one abandoned.",
+    "l4-h":"Critique the cause, not the symptom",
+    "l4-p":"\"It came out like a cramped table\" lets you fix the structure; \"it's ugly\" doesn't.",
+    "s6-stack-h":"Stack and techniques",
+    "p1":"<span class=\"d\">·</span> HTML + JS, no frameworks",
+    "p2":"<span class=\"d\">·</span> Installable PWA",
+    "p3":"<span class=\"d\">·</span> localStorage",
+    "p4":"<span class=\"d\">·</span> Service worker / offline",
+    "p5":"<span class=\"d\">·</span> Wake Lock API",
+    "p6":"<span class=\"d\">·</span> Timestamp-based timer",
+    "p7":"<span class=\"d\">·</span> GitHub Pages",
+    "p8":"<span class=\"d\">·</span> Responsive design",
+
+    "f-p":"A vibecoding project — idea, specification and direction by <strong>Germán</strong>.",
+    "f-app":"Open the app",
+    "f-code":"See the code"
+  };
+
+  // ---- Motor del toggle ----
+  const els = document.querySelectorAll('[data-i18n]');
+  const ES = new Map();
+  els.forEach(el => ES.set(el, el.innerHTML)); // captura el español original
+  const TITLE = { es:"CoffeeHouse — Caso de estudio", en:"CoffeeHouse — Case study" };
+
+  function setLang(lang){
+    document.documentElement.lang = lang;
+    els.forEach(el => {
+      const k = el.dataset.i18n;
+      el.innerHTML = (lang === 'en' && EN[k] != null) ? EN[k] : ES.get(el);
+    });
+    document.title = TITLE[lang] || TITLE.es;
+    document.getElementById('btn-es').classList.toggle('on', lang === 'es');
+    document.getElementById('btn-en').classList.toggle('on', lang === 'en');
+    try { localStorage.setItem('ch-lang', lang); } catch(e){}
+  }
+
+  // idioma inicial: preferencia guardada > navegador > español
+  let start = 'es';
+  try {
+    const saved = localStorage.getItem('ch-lang');
+    if (saved) start = saved;
+    else if ((navigator.language||'').toLowerCase().startsWith('en')) start = 'en';
+  } catch(e){}
+  setLang(start);
 </script>
 </body>
 </html>
